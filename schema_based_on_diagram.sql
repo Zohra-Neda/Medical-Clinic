@@ -52,3 +52,18 @@ CREATE TABLE patient_treatments (
     patient_id INT REFERENCES patients(id),
     treatment_id INT REFERENCES treatments(id)
 );
+
+
+-- add foreign key index to medical_histories table
+ALTER TABLE medical_histories ADD CONSTRAINT fk_medical_histories_patients FOREIGN KEY (patient_id) REFERENCES patients(id);
+
+-- add foreign key index to invoices table
+ALTER TABLE invoices ADD CONSTRAINT fk_invoices_medical_histories FOREIGN KEY (medical_history_id) REFERENCES medical_histories(id);
+
+-- add foreign key index to invoice_items table
+ALTER TABLE invoice_items ADD CONSTRAINT fk_invoice_items_invoices FOREIGN KEY (invoice_id) REFERENCES invoices(id);
+ALTER TABLE invoice_items ADD CONSTRAINT fk_invoice_items_treatments FOREIGN KEY (treatment_id) REFERENCES treatments(id);
+
+-- add foreign key index to patient_treatments table
+ALTER TABLE patient_treatments ADD CONSTRAINT fk_patient_treatments_patients FOREIGN KEY (patient_id) REFERENCES patients(id);
+ALTER TABLE patient_treatments ADD CONSTRAINT fk_patient_treatments_treatments FOREIGN KEY (treatment_id) REFERENCES treatments(id);
