@@ -54,38 +54,31 @@ CREATE TABLE treatments_histories (
 );
 
 
--- add FK index for medical_histories.patient_id
-ALTER TABLE medical_histories
-ADD CONSTRAINT fk_medical_histories_patients
-FOREIGN KEY (patient_id)
-REFERENCES patients(id);
+/*These commands will create an index for each foreign key in the relevant table,
+which will improve performance when joining with other tables on those columns.
+Note that these commands assume that the tables and columns exist as defined in the original SQL script.*/
 
--- add FK index for invoices.medical_history_id
-ALTER TABLE invoices
-ADD CONSTRAINT fk_invoices_medical_histories
-FOREIGN KEY (medical_history_id)
-REFERENCES medical_histories(id);
 
--- add FK index for invoices_items.invoice_id
-ALTER TABLE invoices_items
-ADD CONSTRAINT fk_invoices_items_invoices
-FOREIGN KEY (invoice_id)
-REFERENCES invoices(id);
+-- create index for medical_histories.patient_id
+CREATE INDEX idx_medical_histories_patient_id
+ON medical_histories(patient_id);
 
--- add FK index for invoices_items.treatment_id
-ALTER TABLE invoices_items
-ADD CONSTRAINT fk_invoices_items_treatments
-FOREIGN KEY (treatment_id)
-REFERENCES treatments(id);
+-- create index for invoices.medical_history_id
+CREATE INDEX idx_invoices_medical_history_id
+ON invoices(medical_history_id);
 
--- add FK index for treatments_histories.treatment_id
-ALTER TABLE treatments_histories
-ADD CONSTRAINT fk_treatments_histories_treatments
-FOREIGN KEY (treatment_id)
-REFERENCES treatments(id);
+-- create index for invoices_items.invoice_id
+CREATE INDEX idx_invoices_items_invoice_id
+ON invoices_items(invoice_id);
 
--- add FK index for treatments_histories.medical_histories_id
-ALTER TABLE treatments_histories
-ADD CONSTRAINT fk_treatments_histories_medical_histories
-FOREIGN KEY (medical_histories_id)
-REFERENCES medical_histories(id);
+-- create index for invoices_items.treatment_id
+CREATE INDEX idx_invoices_items_treatment_id
+ON invoices_items(treatment_id);
+
+-- create index for treatments_histories.treatment_id
+CREATE INDEX idx_treatments_histories_treatment_id
+ON treatments_histories(treatment_id);
+
+-- create index for treatments_histories.medical_histories_id
+CREATE INDEX idx_treatments_histories_medical_histories_id
+ON treatments_histories(medical_histories_id);
