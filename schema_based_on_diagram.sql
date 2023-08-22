@@ -47,23 +47,45 @@ CREATE TABLE invoices_items (
 );
 
 -- create join table
-CREATE TABLE patient_treatments (
-    id SERIAL PRIMARY KEY,
-    patient_id INT REFERENCES patients(id),
-    treatment_id INT REFERENCES treatments(id)
+CREATE TABLE treatments_histories (
+  treatment_id INT REFERENCES treatments(id),
+  medical_histories_id INT REFERENCES medical_histories(id),
+  PRIMARY KEY (  treatment_id, medical_histories_id)
 );
 
 
--- add foreign key index to medical_histories table
-ALTER TABLE medical_histories ADD CONSTRAINT fk_medical_histories_patients FOREIGN KEY (patient_id) REFERENCES patients(id);
+-- add FK index for medical_histories.patient_id
+ALTER TABLE medical_histories
+ADD CONSTRAINT fk_medical_histories_patients
+FOREIGN KEY (patient_id)
+REFERENCES patients(id);
 
--- add foreign key index to invoices table
-ALTER TABLE invoices ADD CONSTRAINT fk_invoices_medical_histories FOREIGN KEY (medical_history_id) REFERENCES medical_histories(id);
+-- add FK index for invoices.medical_history_id
+ALTER TABLE invoices
+ADD CONSTRAINT fk_invoices_medical_histories
+FOREIGN KEY (medical_history_id)
+REFERENCES medical_histories(id);
 
--- add foreign key index to invoice_items table
-ALTER TABLE invoice_items ADD CONSTRAINT fk_invoice_items_invoices FOREIGN KEY (invoice_id) REFERENCES invoices(id);
-ALTER TABLE invoice_items ADD CONSTRAINT fk_invoice_items_treatments FOREIGN KEY (treatment_id) REFERENCES treatments(id);
+-- add FK index for invoices_items.invoice_id
+ALTER TABLE invoices_items
+ADD CONSTRAINT fk_invoices_items_invoices
+FOREIGN KEY (invoice_id)
+REFERENCES invoices(id);
 
--- add foreign key index to patient_treatments table
-ALTER TABLE patient_treatments ADD CONSTRAINT fk_patient_treatments_patients FOREIGN KEY (patient_id) REFERENCES patients(id);
-ALTER TABLE patient_treatments ADD CONSTRAINT fk_patient_treatments_treatments FOREIGN KEY (treatment_id) REFERENCES treatments(id);
+-- add FK index for invoices_items.treatment_id
+ALTER TABLE invoices_items
+ADD CONSTRAINT fk_invoices_items_treatments
+FOREIGN KEY (treatment_id)
+REFERENCES treatments(id);
+
+-- add FK index for treatments_histories.treatment_id
+ALTER TABLE treatments_histories
+ADD CONSTRAINT fk_treatments_histories_treatments
+FOREIGN KEY (treatment_id)
+REFERENCES treatments(id);
+
+-- add FK index for treatments_histories.medical_histories_id
+ALTER TABLE treatments_histories
+ADD CONSTRAINT fk_treatments_histories_medical_histories
+FOREIGN KEY (medical_histories_id)
+REFERENCES medical_histories(id);
